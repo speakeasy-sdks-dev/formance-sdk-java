@@ -5,10 +5,16 @@
 package com.formance.formance_sdk;
 
 import com.formance.formance_sdk.hooks.ClientCredentialsHook;
-import com.formance.formance_sdk.utils.Hook.SdkInitData;
+import com.formance.formance_sdk.hooks.SDKHooks;
 import com.formance.formance_sdk.utils.HTTPClient;
+import com.formance.formance_sdk.utils.Hook.SdkInitData;
+import com.formance.formance_sdk.utils.Hooks;
 import com.formance.formance_sdk.utils.RetryConfig;
-import com.formance.formance_sdk.models.shared.Security;
+import java.lang.String;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 class SDKConfiguration {
@@ -18,18 +24,28 @@ class SDKConfiguration {
         return Optional.ofNullable(securitySource);
     }
     public HTTPClient defaultClient;
-      public String serverUrl;
+    public String serverUrl;
     public int serverIdx = 0;
-    public String language = "java";
-    public String openapiDocVersion = "v2.0.4";
-    public String sdkVersion = "3.0.0";
-    public String genVersion = "2.384.1";
-    public String userAgent = "speakeasy-sdk/java 3.0.0 2.384.1 v2.0.4 com.formance.formance_sdk";
+    List<Map<String, String>> serverDefaults = new ArrayList<>(){ {
+        add(new HashMap<>());
+        add(new HashMap<>(){ {
+            put("environment", "sandbox");
+            put("organization", "orgID-stackID");
+        } });
+    } };
+    private static final String LANGUAGE = "java";
+    public static final String OPENAPI_DOC_VERSION = "v2.1.0-beta.3";
+    public static final String SDK_VERSION = "3.1.0";
+    public static final String GEN_VERSION = "2.429.0";
+    private static final String BASE_PACKAGE = "com.formance.formance_sdk";
+    public static final String USER_AGENT = 
+            String.format("speakeasy-sdk/%s %s %s %s %s", 
+                LANGUAGE, SDK_VERSION, GEN_VERSION, OPENAPI_DOC_VERSION, BASE_PACKAGE);
 
-    private com.formance.formance_sdk.utils.Hooks _hooks = createHooks();
+    private Hooks _hooks = createHooks();
 
-    private static com.formance.formance_sdk.utils.Hooks createHooks() {
-        com.formance.formance_sdk.utils.Hooks hooks = new com.formance.formance_sdk.utils.Hooks();
+    private static Hooks createHooks() {
+        Hooks hooks = new Hooks();
         // register client credentials hooks
         ClientCredentialsHook h = new ClientCredentialsHook();
         hooks.registerSdkInit(h);
@@ -38,11 +54,11 @@ class SDKConfiguration {
         return hooks;
     }
     
-    public com.formance.formance_sdk.utils.Hooks hooks() {
+    public Hooks hooks() {
         return _hooks;
     }
 
-    public void setHooks(com.formance.formance_sdk.utils.Hooks hooks) {
+    public void setHooks(Hooks hooks) {
         this._hooks = hooks;
     }
 
@@ -50,7 +66,7 @@ class SDKConfiguration {
      * Initializes state (for example hooks).
      **/
     public void initialize() {
-        com.formance.formance_sdk.hooks.SDKHooks.initialize(_hooks);
+        SDKHooks.initialize(_hooks);
         // apply the sdk init hook immediately
         SdkInitData data = _hooks.sdkInit(new SdkInitData(serverUrl, defaultClient));
         this.serverUrl = data.baseUrl();
@@ -59,5 +75,8 @@ class SDKConfiguration {
 
     
     
+    public Map<String, String> getServerVariableDefaults() {
+        return serverDefaults.get(this.serverIdx);
+    }
     public Optional<RetryConfig> retryConfig = Optional.empty();
 }

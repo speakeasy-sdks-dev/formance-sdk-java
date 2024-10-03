@@ -1,0 +1,35 @@
+speakeasyVersion: 1.406.0
+sources:
+    my-source:
+        sourceNamespace: my-source
+        sourceRevisionDigest: sha256:78272f7184804f63c46d6498e8377d500946b82173629ea14ffab7f661bfe542
+        sourceBlobDigest: sha256:289baef68db829be9ab3b7d551c2c8f06c9adf872c08c55eb3d4fb8cc570d555
+        tags:
+            - latest
+            - main
+targets:
+    Java:
+        source: my-source
+        sourceNamespace: my-source
+        sourceRevisionDigest: sha256:78272f7184804f63c46d6498e8377d500946b82173629ea14ffab7f661bfe542
+        sourceBlobDigest: sha256:289baef68db829be9ab3b7d551c2c8f06c9adf872c08c55eb3d4fb8cc570d555
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        my-source:
+            inputs:
+                - location: $openapi_spec_url
+            registry:
+                location: registry.speakeasyapi.dev/formance/formance/my-source
+    targets:
+        Java:
+            target: java
+            source: my-source
+            publish:
+                java:
+                    ossrhUsername: $OSSRH_USERNAME
+                    ossrhPassword: $OSSRH_PASSWORD
+                    gpgSecretKey: $JAVA_GPG_SECRET_KEY
+                    gpgPassPhrase: $JAVA_GPG_PASSPHRASE
+                    useSonatypeLegacy: true
