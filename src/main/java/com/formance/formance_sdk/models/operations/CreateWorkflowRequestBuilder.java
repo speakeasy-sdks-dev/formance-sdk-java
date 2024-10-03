@@ -4,35 +4,26 @@
 
 package com.formance.formance_sdk.models.operations;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.formance.formance_sdk.models.errors.SDKError;
-import com.formance.formance_sdk.utils.LazySingletonValue;
+import com.formance.formance_sdk.models.shared.CreateWorkflowRequest;
 import com.formance.formance_sdk.utils.Utils;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.Optional;
-import java.util.stream.Stream;
-import org.openapitools.jackson.nullable.JsonNullable;
-
 
 public class CreateWorkflowRequestBuilder {
 
-    private Optional<? extends com.formance.formance_sdk.models.shared.CreateWorkflowRequest> request = Optional.empty();
+    private Optional<? extends CreateWorkflowRequest> request = Optional.empty();
     private final SDKMethodInterfaces.MethodCallCreateWorkflow sdk;
 
     public CreateWorkflowRequestBuilder(SDKMethodInterfaces.MethodCallCreateWorkflow sdk) {
         this.sdk = sdk;
     }
                 
-    public CreateWorkflowRequestBuilder request(com.formance.formance_sdk.models.shared.CreateWorkflowRequest request) {
+    public CreateWorkflowRequestBuilder request(CreateWorkflowRequest request) {
         Utils.checkNotNull(request, "request");
         this.request = Optional.of(request);
         return this;
     }
 
-    public CreateWorkflowRequestBuilder request(Optional<? extends com.formance.formance_sdk.models.shared.CreateWorkflowRequest> request) {
+    public CreateWorkflowRequestBuilder request(Optional<? extends CreateWorkflowRequest> request) {
         Utils.checkNotNull(request, "request");
         this.request = request;
         return this;
